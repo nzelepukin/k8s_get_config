@@ -24,7 +24,7 @@ def k8s_rb_namespaced_add(username: str,namespace: str ,role: str,api_client: cl
     body['metadata']['name']=f'{username}-{role}-RB'
     body['metadata']['namespace']=namespace
     body['subjects'][0]['name']=username
-    body['roleRef']['name']=f'{namespace}-{role}'
+    body['roleRef']['name']=role
     try: 
         logging.info(body)
         rbac_api.create_namespaced_role_binding(body=body,namespace=namespace)

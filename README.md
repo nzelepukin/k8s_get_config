@@ -1,6 +1,8 @@
 
 ## PreDeploy
 ```
+kubectl apply -f k8s_deploy/namespaced-roles.yaml            -- this one must be used for each namespace 
+kubectl apply -f k8s_deploy/clusterrole-read-pf.yaml
 kubectl apply -f k8s_deploy/get-config-cm.yaml -n my-namespace
 kubectl create sa k8s-get-config-sa -n my-namespace
 kubectl apply -f k8s_deploy/get-config-sa-R.yaml
