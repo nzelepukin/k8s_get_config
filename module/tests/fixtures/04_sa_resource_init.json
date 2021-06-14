@@ -1,0 +1,26 @@
+{
+  "api_version": null,
+  "automount_service_account_token": false,
+  "image_pull_secrets": null,
+  "kind": "ServiceAccount",
+  "metadata": {
+    "annotations": null,
+    "cluster_name": null,
+    "creation_timestamp": null,
+    "deletion_grace_period_seconds": null,
+    "deletion_timestamp": null,
+    "finalizers": null,
+    "generate_name": null,
+    "generation": null,
+    "initializers": null,
+    "labels": null,
+    "managed_fields": null,
+    "name": "joe",
+    "namespace": null,
+    "owner_references": null,
+    "resource_version": null,
+    "self_link": null,
+    "uid": null
+  },
+  "secrets": null
+}

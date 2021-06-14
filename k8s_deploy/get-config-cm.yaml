@@ -1,0 +1,21 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: get-config-cm
+data:
+  config.yml: |
+    users:
+      nzelepukin:
+        cluster:
+          admin: True
+          read-pf: False
+        namespace: []
+      nivanov:
+        cluster:
+          admin: False
+          read-pf: False
+        namespace:
+          - name: ai-stage
+            pods-r: True
+            port-forward: True
+            admin: False

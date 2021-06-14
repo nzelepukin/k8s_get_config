@@ -1,0 +1,3 @@
+[console_scripts]
+k8s_user = k8s_user.__main__:main
+

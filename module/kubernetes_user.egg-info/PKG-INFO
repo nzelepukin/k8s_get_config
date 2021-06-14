@@ -1,0 +1,218 @@
+Metadata-Version: 2.1
+Name: kubernetes-user
+Version: 0.0.3
+Summary: A package for creating kubernetes users.
+Home-page: https://github.com/JoeJasinski/k8s_user
+Author: Joe Jasinski
+License: UNKNOWN
+Description: # Kubernetes User Creator
+        
+        The goal of this project is to make it easy to create a Kubernetes user. While the k8s
+        documentation is quick to point out that users do not exist in Kubernetes, sometimes
+        you just want to generate a kubeconfig which has access to the cluster.
+        
+        This access can be achived by the following means:
+        
+        - create a Service Account with a token with access to the cluster
+        - create a RSA certificate/key pair allowing access to the cluster
+        
+        The "user" is not given any permissions be default, so you still need to create/associate
+        the user with ClusterRoleBindings/RoleBindgins.
+        
+        This project is inspired by the following blog post:
+        https://www.openlogic.com/blog/granting-user-access-your-kubernetes-cluster
+        
+        TODO
+        - [x] Automate the creation of openssl key and csr
+        - [x] Automate the creation of a k8s CSR resource
+        - [x] Automate the approval of the CSR resource
+        - [x] Automate the creation of a kubeconfig 
+        - [x] Automate or document the creation of cluster premissions
+        - [x] Create a command line tool as well as python api
+        - [X] Automate the SA Token workflow
+        - [ ] Allow passing in SA and CSR resource metadata to CLI
+        - [ ] Document well
+        - [ ] Automate the build
+        - [ ] 95% test coverage
+        
+        
+        ## Install
+        
+        ```bash
+        pip install kubernetes-user
+        ```
+        
+        ## CLI Quick Start
+        
+        ### Generate a CSR-based User
+        
+        ```bash
+        
+        # basic usage
+        
+        k8s_user csr myusername
+        
+        # or providing a non-default kubeconfig
+        
+        python -m k8s_user csr myusername \
+            --kubeconfig ~/.kube/config
+        
+        # or using local Git checkout
+        
+        pip install -e .
+        python -m k8s_user csr myusername
+        
+        ```
+        
+        ### Generate a SA-based User with token
+        
+        ```bash
+        
+        # basic usage
+        
+        k8s_user sa myusername
+        
+        # or providing a non-default kubeconfig
+        
+        k8s_user sa myusername \
+            --kubeconfig ~/.kube/config
+        
+        # or without installing
+        
+        python -m k8s_user sa myusername
+        
+        # or without installing and providing a non-default kubeconfig
+        
+        python -m k8s_user sa myusername \
+            --kubeconfig ~/.kube/config
+        ```
+        
+        Add a clusterrollbinding for the new user
+        
+        ```bash
+        kubectl create clusterrolebinding joe-admin --clusterrole=admin --user=joe
+        ```
+        
+        
+        ## Python API Quick Start
+        
+        Create and sign the user
+        
+        ```python
+        import kubernetes
+        from kubernetes import client, config
+        api_client = config.new_client_from_config()
+        
+        from k8s_user import CSRK8sUser
+        user = CSRK8sUser(name="joe")
+        inputs = {
+            "cluster_name": "default",
+            "context_name": "default",
+            "out_kubeconfig": "new-kubeconfig.yaml",
+            "creds_dir": ".",
+        }
+        user.create(api_client, inputs)
+        
+        ```
+        
+        Add a clusterrollbinding for the new user
+        
+        ```bash
+        kubectl create clusterrolebinding joe-admin --clusterrole=admin --user=joe
+        ```
+        
+        ## Low-Level CSR API Interaction
+        
+        This example assumes you are connected to a Kubernetes cluster with a kubeconfig in
+        the default location.
+        
+        ```python
+        import kubernetes
+        from kubernetes import client, config
+        from k8s_user.k8s.csr_resource import CSRResource
+        from k8s_user.pki import CSRandKey, Cert
+        
+        csr_name = 'joe'
+        
+        # create a KEY and CSR
+        candk = CSRandKey(csr_name, additional_subject={"O": "jazstudios"})
+        
+        # save the csr and key
+        candk.csr.save("joe.csr.pem")
+        candk.key.save("joe.key.pem")
+        
+        # create the k8s api client. Load the kubeconfig from the default location (~/.kube/config)
+        api_client = config.new_client_from_config()
+        
+        # Define the CertificateSigningRequest Kubernetes Resource
+        csr = CSRResource(
+            name=csr_name,  # the name of the CertificateSigningRequest k8s object
+            csr_str=candk.csr.base64,  # the base64 encoded csr string
+            metadata={"labels": {"foo": "bar"}},  # optional dict with fields matching k8s V1ObjectMeta object
+        )
+        
+        # Check if the k8s CSR resource exists
+        csr.resource_exists(api_client)
+        
+        # Create the k8s CSR resource
+        obj = csr.create(api_client)
+        
+        # Check again if the k8s CSR resource exists (it will now)
+        csr.resource_exists(api_client)
+        
+        # Approve the k8s CSR resource
+        approved_csr_obj = csr.approve(api_client)
+        
+        # Get the certificate as a base64 encoded PEM string
+        crt_str = csr.get_cert(api_client)
+        
+        # Save the certificate to a file
+        candk = Cert(crt_data=base64.b64decode(crt_str))
+        candk.save('joe.crt.pem')
+        ```
+        
+        ## Development
+        
+        It is recommended that you have Docker installed in order to use
+        the development tools for this project. The Makefile will use Docker
+        to run the installation and unit tests.
+        
+        ### Makefile Usage
+        
+        Build a Docker image with all the deps needed to test this project.
+        
+        ```bash
+        make build
+        ```
+        
+        Run the unit tests for this project.
+        
+        ```bash
+        make test
+        ```
+        
+        Enter into an interactive shell inside a Docker, with all dependencies installed.
+        
+        ```bash
+        make shell
+        ```
+        
+        Clean up all temporary files generated by this project
+        
+        ```bash
+        make clean
+        ```
+        
+        Create a Python wheel in the dist/ directory
+        
+        ```bash
+        make package
+        ```
+        
+Platform: UNKNOWN
+Classifier: Programming Language :: Python :: 3
+Classifier: License :: OSI Approved :: MIT License
+Classifier: Operating System :: OS Independent
+Requires-Python: >=3.6
+Description-Content-Type: text/markdown
+Provides-Extra: test

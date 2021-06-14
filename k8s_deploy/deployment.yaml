@@ -1,0 +1,116 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: get-config
+  labels:
+    app: get-config
+    affinitygroup: get-config
+spec:
+  replicas: 1
+  strategy:
+    type: RollingUpdate
+    rollingUpdate:
+      maxSurge: 1
+      maxUnavailable: 1
+  selector:
+    matchLabels:
+      app: get-config
+      affinitygroup: get-config
+  template:
+    metadata:
+      labels:
+        app: get-config
+        affinitygroup: get-config
+    spec:
+      affinity:
+        podAntiAffinity:
+          requiredDuringSchedulingIgnoredDuringExecution:
+            - labelSelector:
+                matchExpressions:
+                  - key: affinitygroup
+                    operator: In
+                    values:
+                      - get-config
+              topologyKey: "kubernetes.io/hostname"
+      serviceAccountName: get-config-sa
+      imagePullSecrets:
+        - name: regcred
+      volumes:
+        - name: tmp
+          emptyDir: {}
+        - name: get-config-cm
+          configMap:
+            name: get-config-cm
+      containers:
+        - name: get-config
+          image: j0k3rswork/k8s-get-config:1.0
+          command: ["python"]
+          args: ["run.py"]
+          env:
+            - name: APP_PORT
+              value: "8080"
+            - name: TMP_DIR
+              value: "/tmp"
+            - name: KUBE_API_URL
+              value: "https://1.2.3.4:6443"
+            - name: LDAP_SERVER
+              value: "my-ldap-server.my-domain.com"
+            - name: LDAP_DOMAIN
+              value: "ldap-domain"
+          livenessProbe:
+            httpGet:
+              path: /
+              port: 8080
+            initialDelaySeconds: 60
+            periodSeconds: 10
+            failureThreshold: 10
+          readinessProbe:
+            httpGet:
+              path: /
+              port: 8080
+            initialDelaySeconds: 60
+            periodSeconds: 10
+            failureThreshold: 3
+          ports:
+            - containerPort: 8080
+          resources:
+            requests:
+              cpu: "0.01"
+              memory: "128Mi"
+            limits:
+              cpu: "0.5"
+              memory: "512Mi"
+          volumeMounts:
+            - name: tmp
+              mountPath: /tmp/
+            - name: get-config-cm
+              mountPath: /app/config
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: get-config
+  labels:
+    app: get-config
+spec:
+  ports:
+    - name: dashboard
+      port: 8080
+      protocol: TCP
+      targetPort: 8080
+  selector:
+    app: get-config
+---
+apiVersion: extensions/v1beta1
+kind: Ingress
+metadata:
+  name: get-config
+spec:
+  rules:
+    - host: get-config.mydomain.com
+      http:
+        paths:
+          - path: /
+            backend:
+              serviceName: get-config
+              servicePort: 8080

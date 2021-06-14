@@ -1,0 +1,89 @@
+<html>
+    <head>
+        <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+        <link rel="stylesheet" href="login.css">
+        <script>
+            window.addEventListener( "load", function () {
+                function sendData() {
+                  const XHR = new XMLHttpRequest();              
+                  var data = {
+	            	username: document.getElementById("login").value,
+	            	password: document.getElementById("password").value
+	                };
+               
+                  // Define what happens in case of error
+                  XHR.addEventListener( "error", function( event ) {
+                    alert( 'Something went wrong plz reload the page.' );
+                  } );
+                  XHR.onload = function () {
+                    if (this.status === 200) {
+                        var filename = "";
+                        var disposition = XHR.getResponseHeader('Content-Disposition');
+                        if (disposition && disposition.indexOf('attachment') !== -1) {
+                            var filenameRegex = /filename[^;=\n]*=((['"]).*?\2|[^;\n]*)/;
+                            var matches = filenameRegex.exec(disposition);
+                            if (matches != null && matches[1]) filename = matches[1].replace(/['"]/g, '');
+                        }
+                        var type = XHR.getResponseHeader('Content-Type');
+                        var blob = new Blob([this.response], { type: type });
+                        if (typeof window.navigator.msSaveBlob !== 'undefined') {
+                            // IE workaround for "HTML7007: One or more blob URLs were revoked by closing the blob for which they were created. These URLs will no longer resolve as the data backing the URL has been freed."
+                            window.navigator.msSaveBlob(blob, filename);
+                        } else {
+                            var URL = window.URL || window.webkitURL;
+                            var downloadUrl = URL.createObjectURL(blob);
+
+                            if (filename) {
+                                // use HTML5 a[download] attribute to specify filename
+                                var a = document.createElement("a");
+                                if (typeof a.download === 'undefined') {
+                                    window.location = downloadUrl;
+                                } else {
+                                    a.href = downloadUrl;
+                                    a.download = filename;
+                                    document.body.appendChild(a);
+                                    a.click();
+                                }
+                            } else {
+                                window.location = downloadUrl;
+                            }
+
+                            setTimeout(function () { URL.revokeObjectURL(downloadUrl); }, 100); // cleanup
+                        }
+                    } else { alert( event.target.responseText ) }
+                };
+                  // Set up our request
+                  XHR.open( "POST", "/get_config" );
+              
+                  // The data sent is what the user provided in the form
+                  XHR.send( JSON.stringify(data) );
+                }
+            
+                // Access the form element...
+                const form = document.getElementById( "LoginForm" );
+            
+                // ...and take over its submit event.
+                form.addEventListener( "submit", function ( event ) {
+                  event.preventDefault();
+                  sendData();
+                } );
+            } );
+
+        </script>
+    </head>
+    <body>
+        <div class="wrapper fadeInDown">
+            <div id="formContent">
+                <form id="LoginForm">
+                    <p></p>
+                    <div class="fadeIn first">
+                            <p><img src="user-icon.png" width="30" height="30" alt="User Icon" ></p>
+                      </div>
+                    <input type="text" id="login" class="fadeIn second" placeholder="login">
+                    <input type="password" id="password" class="fadeIn third" placeholder="password">
+                    <input type="submit" class="fadeIn fourth" id="login" value="Download config" >
+                </form>
+            </div>
+        </div>
+    </body>
+</html>

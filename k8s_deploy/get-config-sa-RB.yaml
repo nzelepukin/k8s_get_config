@@ -1,0 +1,12 @@
+kind: ClusterRoleBinding
+apiVersion: rbac.authorization.k8s.io/v1
+metadata:
+  name: get-config-sa-RB
+subjects:
+- kind: ServiceAccount
+  name: get-config-sa
+  namespace: my-namespace
+roleRef:
+  kind: ClusterRole
+  name: get-config-sa-RB
+  apiGroup: "rbac.authorization.k8s.io"

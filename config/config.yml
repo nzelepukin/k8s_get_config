@@ -1,0 +1,15 @@
+users:
+  testadmin:
+    cluster:
+      admin: True
+      read-pf: False
+    namespace: []
+  testuser:
+    cluster:
+      admin: False
+      read-pf: False
+    namespace:
+      - name: my-namespace
+        pods-r: True
+        port-forward: True
+        admin: False

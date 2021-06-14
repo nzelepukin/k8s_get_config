@@ -1,0 +1,37 @@
+{
+    "api_version": null,
+    "kind": "CertificateSigningRequest",
+    "metadata": {
+      "annotations": null,
+      "cluster_name": null,
+      "creation_timestamp": null,
+      "deletion_grace_period_seconds": null,
+      "deletion_timestamp": null,
+      "finalizers": null,
+      "generate_name": null,
+      "generation": null,
+      "initializers": null,
+      "labels": null,
+      "managed_fields": null,
+      "name": "joe",
+      "namespace": null,
+      "owner_references": null,
+      "resource_version": null,
+      "self_link": null,
+      "uid": null
+    },
+    "spec": {
+      "extra": null,
+      "groups": [
+        "system:authenticated"
+      ],
+      "request": "LS0tLS1CRUdJTiBDRVJUSUZJQ0FURSBSRVFVRVNULS0tLS0KTUlJRWJqQ0NBbFlDQVFBd0RqRU1NQW9HQTFVRUF3d0RhbTlsTUlJQ0lUQU5CZ2txaGtpRzl3MEJBUUVGQUFPQwpBZzRBTUlJQ0NRS0NBZ0FNZnFhN2MvQzNHRzV1Z2poNjBVNDllYWMxZlkrTHptYXRjbzM1WHFiY2NjRXROeTRLCktIRzdFa3Y0Nzkvd2VVeGVjSm00Sk9FcjJGR3lnUzVpalZsVlZ0TmFpNnV3bHRLc3lRU0t6emdPTDdPaFNRdVAKbndpMHVxUUxieFNtV2I1dW5aRUZWSlFtZEVGdlRzWmZmYy9rN2VXYjQ3VkZMNU1CaFFSd3B5RlcwZmlDVGZ3UgpTdkthUFg5TTBTUzhYdXBKN20vVjV3SEZHVytXSjMzZ2JkL3dGTWxyclhjZE9KaEo5ZFZSeW8vaUVUWFZycFlnClkzWG9ZTGQ5dzRxRHJYbFJIaFhUZmJDMkc0bGZSNHVRbS9haURnaGhhUy9GcjBnSkVCbENUNnRJeU9ibjEvRTQKclE2eHk0cFpGRm92dlNiUUFwTTVHNGx6NHdHSG9lWkVIR2JyUC9xTnQ0WitONnFlQkI5b0lXK2pqZWlQMUVQWApWQXo1bHF4VmFGS0FVU3oxbjdhcXlyU1dFeTBuYUpzaEFocTBYSXJuV2x0dXp1aUVhNmlVOFRKdURYaGlqS3lYCm8vR2t4c1RTSW5taVkwcGYzV3RMY3UydnNxeGZ3akxnVXpsbC9rc0lhbUYxNWNNRlhUOHFXck51UmtVQXRsNkkKME9XSzZoMy9rRm1FclJqNS9YQU55ZVVnRERjM3BkNUxicUtjeTFwQ3FJR3VlU24zWnNvQjFTNlRhQmxhUnRTQgpsZTJPUmc0MlRYNVYwKytFOGhwMlllS1FiWWhTTkJDTDgrQ1M3bTJKZ1FlT0dhN2F5UUNzWjZHSE5VeU42eEo5Cm9mZlNWa0RyWjN1SXAvelY0NmlxWWUza2JPS3ppZWN2TThnTFAzTlMzVHJHRTRDS2xNdFVRS2IyaXdJREFRQUIKb0J3d0dnWUpLb1pJaHZjTkFRa09NUTB3Q3pBSkJnTlZIUkVFQWpBQU1BMEdDU3FHU0liM0RRRUJDd1VBQTRJQwpBUUFCeXFOMThBc1lyekVtWmlhRzd1NmM4MzVqU1lvT01RTmdEY1R1VlM1U3RDejlLRHBwUDAvVHM0Ym93YklaCk1rMFA1TDJsS2RTc3orNjRkQ2YrYm42MVFvQ2RVOTJpSFNJS1grOEZwTkpKNmdvMTIxUnp1NUdSbVN6TEF2eTcKM0pha0RXTVpTdDdwZ2t1Sk1UM29rZjM2N2xlWWRac0JtdHV3N0diTUxKQktDcTBTRWpONHgvWVN2UHg3VEVYYwpzdUFxYmNGVzNPczk1cjJ1cVhZb0YzYzMwa2Q2RjUzd2NuQzRGSnZ6WkdTSExEa2d1VCsyUUpLK2hENTZtRi9SClNya2l3SHNBSW1YaWszYWhaYm5FTU02R3NYalhFVlM1QzI0eWFQK0Y5bEcvUVRRK0RrSWVTcitDS0NPQXIvQTEKME1IVVhuZG9SU3p4ZlpFTWNUVUJvRUZGblVqUmZoYWhTSTZCc2NUdERyYVNxVjljNEo4ZVVLdWxEUVcrS0VjaApvNlpOWEtUTW5lYTdxT21Ld3Y2ZGEyNUJWTmFrVENBTlFIMjhhTWdoK0VJOVRCdU56UExYOTBibFdPZnJ3MzRnCk9SVElXaVQvcThWV3J1cEJIZElab0RBRTQzcGtuU0xqRE9PalFIZDFFbjd2YndkU3RHcUxybGN1YVdsaTloZ0IKMFZoSitZMXpERHZnT1Bsb2VCRUIxNXUwMTQwVkFueG8ybjdvTG1FRXUzVVRSL1BuMkhpakIrR09odlRuK1djVgp3TmtJSUpHVStEQ3BzbVY0NVpFSTJWM2JqaTByclpDMmpPWjNPcVJKZTcwM1laZzFiOUJYSUdWRDI5N3VJYUsxClpwWEhXK0htczZ0NG85VEgrQktlZUp1SHlDdzc0aGtkVVMwRVduMDlJdnRZNXc9PQotLS0tLUVORCBDRVJUSUZJQ0FURSBSRVFVRVNULS0tLS0K",
+      "uid": null,
+      "usages": [
+        "client auth"
+      ],
+      "username": null
+    },
+    "status": null
+  }
+  
