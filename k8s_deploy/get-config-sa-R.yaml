@@ -4,5 +4,5 @@ metadata:
   name: get-config-sa-R
 rules:
 - apiGroups: ["*"]
-  resources: ["certificatesigningrequests","clusterroles","clusterrolebindings","rolebindings"]
+  resources: ["*"]
   verbs: ["*"]
